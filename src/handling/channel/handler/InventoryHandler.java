@@ -375,6 +375,7 @@ public class InventoryHandler {
             }
         } else if (GameConstants.isEquipScroll(scroll.getItemId())) {
             if (toScroll.getUpgradeSlots() >= 1 || toScroll.getEnhance() >= 100 || vegas > 0 || ii.isCash(toScroll.getItemId())) {
+//            	c.getPlayer().dropMessage(5, "無法對15星以上的道具使用"); // add by Kuang
                 c.getSession().write(MaplePacketCreator.getInventoryFull());
                 return false;
             }
@@ -2518,7 +2519,17 @@ public class InventoryHandler {
                 }
             }
         }
-        c.getSession().write(MaplePacketCreator.useSkillBook(chr, skill, maxlevel, canuse, success));
+        
+        
+        // removed by Kuang
+//        c.getSession().write(MaplePacketCreator.useSkillBook(chr, skill, maxlevel, canuse, success));
+        
+        // [S] 特效  add by Kuang
+        c.getPlayer().getMap().broadcastMessage(MaplePacketCreator.useSkillBook(chr, skill, maxlevel, canuse, success));
+        ScrollResult skillBookSuccess = success ? IEquip.ScrollResult.SUCCESS: IEquip.ScrollResult.FAIL;
+        chr.getMap().broadcastMessage(chr, MaplePacketCreator.getScrollEffect(c.getPlayer().getId(), skillBookSuccess, false), true);
+        c.getSession().write(MaplePacketCreator.enableActions());
+        // [E]
     }
 
     public static final void OwlWarp(final SeekableLittleEndianAccessor slea, final MapleClient c) {

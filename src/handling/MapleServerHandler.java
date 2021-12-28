@@ -61,6 +61,7 @@ import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoSession;
 import server.MTSStorage;
+import server.MapleShopFactory;
 import server.ServerProperties;
 import tools.FileoutputUtil;
 
@@ -526,7 +527,9 @@ public class MapleServerHandler extends IoHandlerAdapter implements MapleServerH
             		c.getPlayer().dropMessage(5, "尚未達到10級將無法使用。");
             	}
             	else {
-            		NPCScriptManager.getInstance().start(c, 9000020);
+//            		NPCScriptManager.getInstance().start(c, 9000020);
+            		c.getPlayer().setConversation(1);
+            		MapleShopFactory.getInstance().getShopForNPC(2041003).sendShop(c);
             	}
             	c.getSession().write(MaplePacketCreator.enableActions());
 //                InterServerHandler.EnterCS(c, c.getPlayer(), true);
